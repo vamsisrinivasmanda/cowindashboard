@@ -26,7 +26,7 @@ class CowinDashboard extends Component {
     this.setState({activeapiStatus: apiStatus.loader})
     const vaccinationDataApiUrl = 'https://apis.ccbp.in/covid-vaccination-data'
     const response = await fetch(vaccinationDataApiUrl)
-
+    console.log(response.status)
     if (response.ok === true) {
       const data = await response.json()
       const updatedata = {
@@ -44,21 +44,6 @@ class CowinDashboard extends Component {
     }
   }
 
-  renderallViews = () => {
-    const {activeapiStatus} = this.state
-    switch (activeapiStatus) {
-      case apiStatus.success:
-        return this.renderView()
-      case apiStatus.failure:
-        return this.renderfailure()
-      case apiStatus.loader:
-        return this.renderLoader()
-
-      default:
-        return null
-    }
-  }
-
   renderView = () => {
     const {coWinData} = this.state
     const {last7Daysvaccination, vaccinationGender, vaccinationAge} = coWinData
@@ -66,15 +51,7 @@ class CowinDashboard extends Component {
       return null
     }
     return (
-      <div className="dashboard-container">
-        <div className="logo-container">
-          <img
-            src="https://assets.ccbp.in/frontend/react-js/cowin-logo.png"
-            className="cowin-logo"
-            alt="website logo"
-          />
-          <h1 className="logo-heading">Co-WIN</h1>
-        </div>
+      <div>
         <h1 className="heading">CoWIN Vaccination in India</h1>
         <VaccinationCoverage vaccineData={last7Daysvaccination} />
         <VaccinationByGender genderData={vaccinationGender} />
@@ -85,22 +62,11 @@ class CowinDashboard extends Component {
 
   renderfailure = () => (
     <div className="failure-container">
-      <div className="logo-container">
-        <img
-          src="https://assets.ccbp.in/frontend/react-js/cowin-logo.png"
-          className="cowin-logo"
-          alt="website logo"
-        />
-        <h1 className="logo-heading">Co-WIN</h1>
-      </div>
-      <h1 className="heading">CoWIN Vaccination in India</h1>
-      <div>
-        <img
-          src="https://assets.ccbp.in/frontend/react-js/api-failure-view.png"
-          alt="failure view"
-        />
-        <h1 className="failure-heading">Something went wrong</h1>
-      </div>
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/api-failure-view.png"
+        alt="failure view"
+      />
+      <h1 className="failure-heading">Something went wrong</h1>
     </div>
   )
 
@@ -110,8 +76,34 @@ class CowinDashboard extends Component {
     </div>
   )
 
+  renderallViews = () => {
+    const {activeapiStatus} = this.state
+    switch (activeapiStatus) {
+      case apiStatus.success:
+        return this.renderView()
+      case apiStatus.failure:
+        return this.renderfailure()
+      case apiStatus.loader:
+        return this.renderLoader()
+      default:
+        return null
+    }
+  }
+
   render() {
-    return <>{this.renderallViews()} </>
+    return (
+      <div className="dashboard-container">
+        <div className="logo-container">
+          <img
+            src="https://assets.ccbp.in/frontend/react-js/cowin-logo.png"
+            className="cowin-logo"
+            alt="website logo"
+          />
+          <h1 className="logo-heading">Co-WIN</h1>
+        </div>
+        {this.renderallViews()}
+      </div>
+    )
   }
 }
 
