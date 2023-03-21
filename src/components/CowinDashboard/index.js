@@ -39,7 +39,7 @@ class CowinDashboard extends Component {
         activeapiStatus: apiStatus.success,
       })
     }
-    if (response.status === 404) {
+    if (response.ok === false) {
       this.setState({activeapiStatus: apiStatus.failure})
     }
   }
